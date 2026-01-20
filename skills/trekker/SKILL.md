@@ -1,7 +1,7 @@
 ---
 name: trekker
 description: Persistent task memory for AI agents across sessions
-version: 0.1.0
+version: 0.1.1
 ---
 
 # Trekker - Issue Tracker for AI Agents
@@ -60,6 +60,8 @@ trekker comment add <task-id> -a "claude" -c "Checkpoint: done X. Next: Y. Files
 | `trekker task update <id> -s <status>` | Update status |
 | `trekker comment add <id> -a "claude" -c "..."` | Add comment |
 | `trekker dep add <id> <depends-on>` | Add dependency |
+
+**IMPORTANT**: Skill names (e.g., `/start`, `/blocked`) are NOT CLI commands. There is no `trekker task start` or `trekker task set-status` command. Always use `trekker task update <id> -s <status>` to change task status.
 
 ## Status Values
 

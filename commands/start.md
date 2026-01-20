@@ -5,6 +5,8 @@ description: Start working on a task
 
 Begin working on a task by setting its status to in_progress.
 
+**NOTE**: This is a skill, not a bash command. There is no `trekker task start` command. Use `trekker task update` as shown below.
+
 ## Arguments
 
 - `$1`: Task ID (e.g., TREK-1) - optional

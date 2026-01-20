@@ -5,6 +5,8 @@ description: Complete a task with summary
 
 Mark a task as completed with a summary comment.
 
+**NOTE**: This is a skill, not a bash command. There is no `trekker task done` command. Use `trekker task update` as shown below.
+
 ## Arguments
 
 - `$1`: Task ID (e.g., TREK-1) - optional

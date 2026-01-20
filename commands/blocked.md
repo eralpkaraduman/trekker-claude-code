@@ -5,6 +5,8 @@ description: Mark a task as blocked
 
 Mark a task as blocked when it cannot proceed.
 
+**NOTE**: This is a skill, not a bash command. There is no `trekker task blocked` or `trekker task set-status` command. Use `trekker task update` as shown below.
+
 ## Arguments
 
 - `$1`: Task ID (e.g., TREK-1) - optional

@@ -1,0 +1,42 @@
+{
+  "name": "trekker",
+  "description": "AI-optimized issue tracker for coding workflows. Manage tasks, epics, and dependencies with simple CLI commands.",
+  "version": "0.1.0",
+  "author": {
+    "name": "Omer Can Balandi",
+    "url": "https://github.com/obsfx"
+  },
+  "repository": "https://github.com/obsfx/trekker-claude-code",
+  "license": "MIT",
+  "homepage": "https://github.com/obsfx/trekker-claude-code",
+  "keywords": [
+    "issue-tracker",
+    "task-management",
+    "ai-workflow",
+    "agent-memory"
+  ],
+  "hooks": {
+    "SessionStart": [
+      {
+        "matcher": "",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "trekker --toon quickstart"
+          }
+        ]
+      }
+    ],
+    "PreCompact": [
+      {
+        "matcher": "",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "trekker --toon quickstart"
+          }
+        ]
+      }
+    ]
+  }
+}

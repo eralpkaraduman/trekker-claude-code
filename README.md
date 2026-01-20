@@ -10,46 +10,86 @@ A Claude Code plugin for [trekker](https://github.com/obsfx/trekker), the AI-opt
 
 ## Installation
 
-### 1. Install Trekker CLI
+### Step 1: Install Trekker CLI
 
 ```bash
 npm install -g @obsfx/trekker
 ```
 
-### 2. Clone and Build the Plugin
+### Step 2: Install the Plugin
+
+#### Option A: Via Plugin Marketplace (Recommended)
 
 ```bash
+# Add the trekker marketplace
+claude /plugin marketplace add obsfx/trekker-claude-code
+
+# Install the plugin
+claude /plugin install trekker
+```
+
+Or in Claude Code interactive mode:
+
+```
+/plugin marketplace add obsfx/trekker-claude-code
+/plugin install trekker
+```
+
+#### Option B: Manual Installation
+
+```bash
+# Clone the repository
 git clone https://github.com/obsfx/trekker-claude-code.git
-cd trekker-claude-code/mcp-server
+
+# Symlink to Claude plugins directory
+ln -s $(pwd)/trekker-claude-code ~/.claude/plugins/trekker
+```
+
+### Step 3: Build the MCP Server
+
+The MCP server needs to be built after installation:
+
+```bash
+cd ~/.claude/plugins/trekker/mcp-server
 pnpm install
 pnpm build
 ```
 
-### 3. Configure Claude Code
+### Step 4: Configure MCP Server
 
-Add the MCP server to your Claude Code settings (`~/.claude/settings.json`):
+Add the MCP server to your Claude Code settings.
+
+**For Claude Code CLI** (`~/.claude/settings.json`):
 
 ```json
 {
   "mcpServers": {
     "trekker": {
       "command": "node",
-      "args": ["/path/to/trekker-claude-code/mcp-server/dist/index.js"]
+      "args": ["~/.claude/plugins/trekker/mcp-server/dist/index.js"]
     }
   }
 }
 ```
 
-### 4. Install the Plugin
+**For Claude Desktop** (`~/Library/Application Support/Claude/claude_desktop_config.json` on macOS):
 
-Copy or symlink the plugin to your Claude plugins directory:
+```json
+{
+  "mcpServers": {
+    "trekker": {
+      "command": "node",
+      "args": ["/Users/YOUR_USERNAME/.claude/plugins/trekker/mcp-server/dist/index.js"]
+    }
+  }
+}
+```
+
+### Step 5: Initialize Trekker in Your Project
 
 ```bash
-# Option 1: Symlink (recommended for development)
-ln -s /path/to/trekker-claude-code ~/.claude/plugins/trekker
-
-# Option 2: Copy
-cp -r /path/to/trekker-claude-code ~/.claude/plugins/trekker
+cd your-project
+trekker init
 ```
 
 ## Features
@@ -114,19 +154,20 @@ The `task-agent` provides autonomous task completion:
 
 ### Hooks
 
-The plugin automatically loads trekker workflow context:
+The plugin includes smart hooks for context management:
 
-- **SessionStart**: Runs `trekker --toon quickstart` when Claude Code starts
-- **PreCompact**: Reloads context before conversation compaction
+**SessionStart** - When Claude Code starts:
+- Shows in-progress tasks with recent comments (resume context)
+- If no work in progress, shows ready tasks
+- Provides workflow reminder
+
+**PreCompact** - Before context compaction:
+- Reminds to save checkpoint comments
+- Lists all in-progress tasks with details
+- Shows recent comments for context preservation
+- Provides checkpoint comment template
 
 ## Usage
-
-### Initialize Trekker in Your Project
-
-```bash
-cd your-project
-trekker init
-```
 
 ### Basic Workflow
 
@@ -155,12 +196,21 @@ In Claude Code:
 /done TREK-1    # Complete with summary
 ```
 
+### Context Preservation
+
+Before ending a session or when prompted by PreCompact hook:
+
+```bash
+trekker comment add TREK-1 -a "claude" -c "Checkpoint: done X. Next: Y. Files: a.ts, b.ts"
+```
+
 ## Project Structure
 
 ```
 trekker-claude-code/
 ├── .claude-plugin/
-│   └── plugin.json           # Plugin metadata and hooks
+│   ├── plugin.json           # Plugin metadata and hooks
+│   └── marketplace.json      # Marketplace distribution config
 ├── mcp-server/
 │   ├── src/
 │   │   ├── index.ts          # MCP server entry
@@ -177,6 +227,9 @@ trekker-claude-code/
 │       ├── SKILL.md
 │       ├── README.md
 │       └── CLAUDE.md
+├── hooks/
+│   ├── session-start.sh      # SessionStart hook script
+│   └── pre-compact.sh        # PreCompact hook script
 └── docs/
     └── plans/                # Design documents
 ```
@@ -184,13 +237,37 @@ trekker-claude-code/
 ## Development
 
 ```bash
-# Watch mode for development
-cd mcp-server
-pnpm dev
+# Clone the repository
+git clone https://github.com/obsfx/trekker-claude-code.git
+cd trekker-claude-code
 
-# Build for production
+# Build MCP server
+cd mcp-server
+pnpm install
 pnpm build
+
+# Watch mode for development
+pnpm dev
 ```
+
+## Troubleshooting
+
+### Plugin not loading
+
+1. Verify trekker CLI is installed: `trekker --version`
+2. Check plugin is in correct location: `ls ~/.claude/plugins/trekker`
+3. Ensure MCP server is built: `ls ~/.claude/plugins/trekker/mcp-server/dist/index.js`
+
+### MCP tools not available
+
+1. Check MCP server config in settings.json
+2. Restart Claude Code after configuration changes
+3. Verify the path to index.js is correct (use absolute path)
+
+### Hooks not running
+
+1. Ensure hook scripts are executable: `chmod +x hooks/*.sh`
+2. Verify trekker is initialized in project: `ls .trekker`
 
 ## License
 

@@ -1,7 +1,7 @@
 ---
 name: trekker
 description: Persistent task memory for AI agents across sessions
-version: 0.1.6
+version: 0.1.7
 ---
 
 # Trekker - Issue Tracker for AI Agents
@@ -81,15 +81,29 @@ Trekker provides persistent task memory across sessions. Unlike TodoWrite which 
 
 ## Essential Workflow
 
-### Session Start
+### Session Start (Context Recovery)
+
+**ALWAYS run these commands at session start** to understand what's happening:
 
 ```bash
-# Check current work
+# 1. What's currently being worked on?
 trekker --toon task list --status in_progress
 
-# Get context from comments
+# 2. What changed recently? (audit trail)
+trekker history --limit 10
+
+# 3. Full picture of active work
+trekker list --type task --status todo,in_progress --sort priority:asc
+
+# 4. Get context from comments on active tasks
 trekker comment list <task-id>
 ```
+
+**Why context recovery matters:**
+- You don't remember previous sessions - history restores that context
+- Audit log shows WHO changed WHAT and WHEN
+- Prevents duplicate work and conflicting changes
+- Reveals decisions made by other agents or past sessions
 
 ### Starting New Work (Search First)
 
@@ -162,10 +176,68 @@ trekker epic complete <epic-id>
 | `trekker comment add <id> -a "claude" -c "..."` | Add comment |
 | `trekker dep add <id> <depends-on>` | Add dependency |
 | `trekker search "<query>"` | Full-text search |
-| `trekker history --entity <id>` | View change history |
+| `trekker history [--entity <id>]` | View audit log of changes |
+| `trekker list [--type X] [--sort Y]` | Unified view with filters |
 | `trekker epic complete <epic-id>` | Complete epic & archive all tasks |
 
 **Need more details?** Run `trekker quickstart` for full command syntax and examples.
+
+---
+
+## History & Audit Trail (Critical for Context)
+
+Use `trekker history` to understand what happened in past sessions:
+
+```bash
+# Recent changes across all entities
+trekker history --limit 20
+
+# Changes to a specific task
+trekker history --entity TREK-1
+
+# Only task updates (filter by type)
+trekker history --type task --action update
+
+# Changes since a specific date
+trekker history --since 2025-01-15 --limit 30
+
+# Filter by action type
+trekker history --action create,update --limit 15
+```
+
+**When to use history:**
+- Session start - understand recent activity
+- Before modifying a task - see its change trail
+- Debugging conflicts - who changed what when
+- Resuming work - recall context from previous sessions
+
+---
+
+## List Command (Comprehensive Views)
+
+Use `trekker list` for unified views across epics, tasks, and subtasks:
+
+```bash
+# All active items, prioritized
+trekker list --status todo,in_progress --sort priority:asc
+
+# Critical and high priority work
+trekker list --priority 0,1 --sort priority:asc
+
+# Only tasks (no epics/subtasks)
+trekker list --type task --status todo
+
+# Sort by creation date (newest first)
+trekker list --sort created:desc --limit 20
+
+# Alphabetical by title
+trekker list --sort title:asc
+```
+
+**Pro tip:** Combine filters for focused views:
+```bash
+trekker list --type task --status in_progress --priority 0,1,2
+```
 
 ---
 

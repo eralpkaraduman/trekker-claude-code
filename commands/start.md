@@ -18,14 +18,36 @@ If no task ID provided:
 
 ## Execution
 
+### Step 1: Gather Context (Required)
+
+Before starting, understand the task's history:
+
 ```bash
-# Show task details first
+# Show task details
 trekker task show <task-id>
 
+# View change history for this task
+trekker history --entity <task-id>
+
+# Get comments for context
+trekker comment list <task-id>
+```
+
+**Why this matters:**
+- Understand previous work on this task
+- See if it was started/stopped before
+- Recall decisions and blockers from past sessions
+
+### Step 2: Start the Task
+
+```bash
 # Set status to in_progress
 trekker task update <task-id> -s in_progress
 ```
 
 ## After Starting
 
-Display the task details and any relevant comments for context.
+Display a summary including:
+- Task title and description
+- Key points from history/comments
+- Any dependencies or related tasks

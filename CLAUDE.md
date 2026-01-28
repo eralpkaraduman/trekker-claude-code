@@ -2,6 +2,16 @@
 
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
+## CRITICAL: Sandbox Testing Rule
+
+```
+NEVER remove or modify the .trekker folder in this project.
+For testing, ALWAYS create a temporary directory in /tmp and initialize trekker there.
+
+Example:
+  mkdir -p /tmp/trekker-test && cd /tmp/trekker-test && trekker init
+```
+
 ## Project Overview
 
 Trekker Claude Code Plugin - An AI-optimized issue tracker plugin for Claude Code. Provides MCP tools, slash commands, agents, and skills for persistent task management across sessions. The core state is stored in SQLite (`.trekker/trekker.db`) which survives context resets.
@@ -16,12 +26,12 @@ This plugin enforces a **search-first workflow**. The core principle:
 
 **Before ANY action** (creating tasks, starting work, investigating issues):
 ```bash
-trekker search "<query>"           # Semantic search (default)
-trekker search "<query>" --mode keyword  # Exact keyword match
-trekker search "<query>" --mode hybrid   # Combined approach
+trekker search "<query>"           # FTS5 full-text search
+trekker search "<query>" --type task  # Filter by type
+trekker search "<query>" --status todo,in_progress  # Filter by status
 ```
 
-Search uses **semantic mode by default** - finds tasks by meaning, not just keywords. This prevents duplicate work, reveals past decisions, and enables continuity across sessions.
+This prevents duplicate work, reveals past decisions, and enables continuity across sessions.
 
 ## Development Commands
 
@@ -40,7 +50,7 @@ Plugin System (Claude Code)
     ↓
 MCP Server (mcp-server/src/index.ts)
     ↓
-Tool Registry (24 tools in mcp-server/src/tools/)
+Tool Registry (mcp-server/src/tools/)
     ↓
 CLI Runner (mcp-server/src/cli-runner.ts)
     ↓
@@ -58,6 +68,7 @@ SQLite Database (.trekker/trekker.db)
 - `comment.ts` - 4 comment tools
 - `dependency.ts` - 3 dependency tools
 - `system.ts` - 3 system tools (init, quickstart, wipe)
+- `search.ts` - 1 search tool (FTS5)
 
 **Plugin Configuration** (`.claude-plugin/`):
 - `plugin.json` - Metadata, MCP server config, hooks registration
@@ -69,7 +80,7 @@ SQLite Database (.trekker/trekker.db)
 
 **Slash Commands** (`commands/`): 13 markdown files defining user-invocable commands.
 
-**Skills** (`skills/trekker/`): Workflow patterns and essential commands guide.
+**Skills** (`skills/`): Workflow patterns and essential commands guide.
 
 ## Key Patterns
 

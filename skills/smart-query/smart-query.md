@@ -36,12 +36,12 @@ trekker task list --status completed
 # Priority queries
 trekker task list --priority 0,1 --status todo
 
-# Semantic queries (default mode)
+# Search queries (FTS5 full-text search)
 trekker search "performance optimization"
 trekker search "security vulnerability"
 
-# Keyword mode for exact matches
-trekker search "specific error message" --mode keyword
+# Filter search by type or status
+trekker search "bug" --type task --status todo
 
 # Relationship queries
 trekker dep list TREK-10

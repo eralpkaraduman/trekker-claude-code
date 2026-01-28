@@ -27,8 +27,7 @@ Use this workflow when:
 ### Step 1: Search for Related Work
 
 ```bash
-# ALWAYS search first - previous work may exist (semantic by default)
-trekker search "<what you're about to do>"
+# ALWAYS search first - previous work may exist trekker search "<what you're about to do>"
 ```
 
 ### Step 2: Create Epic (if substantial)
@@ -119,8 +118,7 @@ State: [any important context]"
 User: "Add user authentication to the API"
 
 ```bash
-# 1. Search first (semantic by default)
-trekker search "authentication"
+# 1. Search first trekker search "authentication"
 trekker search "login"
 
 # 2. Create epic

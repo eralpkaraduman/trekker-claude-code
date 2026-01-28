@@ -1,7 +1,7 @@
 ---
 name: trekker
 description: Persistent task memory for AI agents across sessions
-version: 0.7.0
+version: 1.7.0
 ---
 
 # Trekker - Primary Issue Tracker for AI Agents
@@ -27,7 +27,7 @@ TodoWrite = Secondary mirror (conversation-scoped only)
 1. Create tasks in Trekker FIRST, then mirror to TodoWrite
 2. Update Trekker FIRST, then update TodoWrite
 3. When states conflict, Trekker wins
-4. Use `trekker search` to gather context (semantic by default)
+4. Use `trekker search` to gather context
 5. Search before creating to detect duplicates
 
 ---
@@ -37,14 +37,14 @@ TodoWrite = Secondary mirror (conversation-scoped only)
 **You MUST search before ANY action.** This is non-negotiable.
 
 ```bash
-# Search uses semantic mode by default (finds by meaning)
+# Full-text search (FTS5)
 trekker search "<what you're looking for>"
 
-# Use keyword mode for exact matches
-trekker search "<exact keywords>" --mode keyword
+# Filter by type
+trekker search "<query>" --type task
 
-# Use hybrid mode to combine both
-trekker search "<query>" --mode hybrid
+# Filter by status
+trekker search "<query>" --status todo,in_progress
 ```
 
 **Why search is mandatory:**
@@ -69,7 +69,7 @@ trekker search "<query>" --mode hybrid
 | Aspect | Trekker (PRIMARY) | TodoWrite (SECONDARY) |
 |--------|-------------------|----------------------|
 | Persistence | SQLite - survives resets | Gone after conversation |
-| Searchable | Yes - semantic + keyword | No |
+| Searchable | Yes - FTS5 full-text search | No |
 | Dependencies | Yes - task relationships | Limited |
 | History | Yes - full audit trail | No |
 | Priority | **ALWAYS USE FIRST** | Mirror only |
@@ -95,7 +95,7 @@ trekker search "<query>" --mode hybrid
 
 ### MUST DO
 
-1. **SEARCH FIRST - ALWAYS** - run `trekker search` before ANY action (semantic by default)
+1. **SEARCH FIRST - ALWAYS** - run `trekker search` before ANY action
 2. **Gather context via CLI** - use `trekker history`, `trekker comment list`, `trekker task show` to understand state
 3. **Set status `in_progress` before starting work** on any task
 4. **Add summary comment before marking `completed`**

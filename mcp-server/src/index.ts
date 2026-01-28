@@ -8,6 +8,7 @@ import { registerSubtaskTools } from './tools/subtask.js';
 import { registerCommentTools } from './tools/comment.js';
 import { registerDependencyTools } from './tools/dependency.js';
 import { registerSystemTools } from './tools/system.js';
+import { registerSearchTools } from './tools/search.js';
 
 const server = new McpServer({
   name: 'trekker-mcp',
@@ -20,6 +21,7 @@ registerSubtaskTools(server);
 registerCommentTools(server);
 registerDependencyTools(server);
 registerSystemTools(server);
+registerSearchTools(server);
 
 async function main() {
   const transport = new StdioServerTransport();

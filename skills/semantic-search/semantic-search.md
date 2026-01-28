@@ -1,48 +1,70 @@
 name: semantic-search
-description: Find tasks, epics, and comments by meaning - not just keywords. Use when exact search terms are unknown.
+description: PRIMARY tool for gathering context. Find tasks by meaning, not keywords. Use BEFORE any action.
 
-## Critical Rule: Bidirectional Sync
+## CRITICAL: Use This First
 
-**Trekker and Claude's TodoWrite MUST stay in sync:**
-- Trekker change → Update TodoWrite
-- TodoWrite change → Update Trekker
-- NEVER let them get out of sync
+**Semantic search is your PRIMARY tool for gathering context.**
 
-## When to Use
+Before starting ANY work:
+```bash
+trekker semantic-search "<what you're about to do>"
+```
 
-- You don't know exact terminology in existing tasks
-- Investigating bug/issue to find related past work
-- User describes problem in natural language
-- Checking if similar work was done before
+This finds related past work even when terminology differs.
+
+## When to Use (ALWAYS)
+
+- **Before creating tasks** - find existing work
+- **Before starting work** - gather context
+- **When investigating issues** - find related bugs
+- **When user describes problem** - understand history
+- **When resuming work** - recover context
 
 ## Examples
 
-| User Says | Finds |
-|-----------|-------|
-| "login problems" | "authentication bug", "OAuth token expired" |
-| "app is slow" | "performance optimization", "latency" |
+| User Says | Command | Finds |
+|-----------|---------|-------|
+| "login problems" | `trekker semantic-search "login problems"` | "authentication bug", "OAuth expired" |
+| "app is slow" | `trekker semantic-search "performance issues"` | "latency", "optimization" |
+| "fix the auth" | `trekker semantic-search "authentication"` | Related auth work |
 
 ## Commands
 
 ```bash
+# Natural language query
 trekker semantic-search "user cannot access account"
+
+# Filter by type
 trekker semantic-search "deployment issues" --type task
+
+# Filter by status
 trekker semantic-search "memory leak" --status todo,in_progress
+
+# Higher precision threshold
 trekker semantic-search "caching" --threshold 0.7
 ```
 
-## Workflow: Before Creating a Task
+## Workflow: Before ANY Task Operation
 
-1. Search first: `trekker semantic-search "<description>"`
-2. If similar found → Review, add comment to existing
-3. If no duplicate → Create new task
-4. SYNC: Update both Trekker AND TodoWrite
+```
+1. SEARCH: trekker semantic-search "<description>"
+2. REVIEW: Check if similar work exists
+3. DECIDE: Update existing OR create new
+4. SYNC: Mirror to TodoWrite after Trekker
+```
 
 ## Score Interpretation
 
-| Score | Meaning |
-|-------|---------|
-| 0.90+ | Almost certainly same issue |
-| 0.75-0.89 | Highly related |
-| 0.60-0.74 | Possibly related |
-| <0.60 | Tangentially related |
+| Score | Meaning | Action |
+|-------|---------|--------|
+| 0.90+ | Same issue | DO NOT create, update existing |
+| 0.75-0.89 | Highly related | Review carefully, may link |
+| 0.60-0.74 | Possibly related | Safe to create, reference existing |
+| <0.60 | Different topic | Safe to create new |
+
+## Trekker is Primary
+
+Remember: Trekker is the source of truth.
+- Search Trekker FIRST
+- Create in Trekker FIRST
+- Then mirror to TodoWrite

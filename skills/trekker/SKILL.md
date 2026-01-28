@@ -1,10 +1,12 @@
 ---
 name: trekker
 description: Persistent task memory for AI agents across sessions
-version: 0.4.0
+version: 0.5.0
 ---
 
-# Trekker - Issue Tracker for AI Agents
+# Trekker - Primary Issue Tracker for AI Agents
+
+**CRITICAL: Trekker is your PRIMARY task tracker. It MUST be prioritized over Claude's built-in TodoWrite.**
 
 Trekker provides persistent task memory across sessions. Unlike TodoWrite which is conversation-scoped, trekker stores tasks in a SQLite database that survives context resets.
 
@@ -14,13 +16,35 @@ Trekker provides persistent task memory across sessions. Unlike TodoWrite which 
 
 ---
 
+## CRITICAL: Trekker Over TodoWrite
+
+```
+Trekker = Source of Truth (survives context resets)
+TodoWrite = Secondary mirror (conversation-scoped only)
+```
+
+**ALWAYS:**
+1. Create tasks in Trekker FIRST, then mirror to TodoWrite
+2. Update Trekker FIRST, then update TodoWrite
+3. When states conflict, Trekker wins
+4. Use `trekker semantic-search` to gather context
+5. Use `trekker similar` to detect duplicates
+
+---
+
 ## CRITICAL: Search-First Workflow
 
 **You MUST search before ANY action.** This is non-negotiable.
 
 ```bash
-# ALWAYS run before starting work
-trekker search "<relevant keywords>"
+# Use semantic search for natural language queries
+trekker semantic-search "<what you're looking for>"
+
+# Use similar to find duplicates before creating
+trekker similar "<task description>"
+
+# Use keyword search for exact matches
+trekker search "<keywords>"
 ```
 
 **Why search is mandatory:**
@@ -32,23 +56,25 @@ trekker search "<relevant keywords>"
 **When to search:**
 | Before... | Search for... |
 |-----------|---------------|
-| Creating a task | Similar/related tasks |
-| Starting work | Past work on same area |
-| Investigating bugs | Previous bug fixes |
-| Implementing features | Related implementations |
-| Making decisions | Past decisions on same topic |
+| Creating a task | `trekker similar "<description>"` |
+| Starting work | `trekker semantic-search "<area>"` |
+| Investigating bugs | `trekker semantic-search "<symptoms>"` |
+| Implementing features | `trekker semantic-search "<feature>"` |
+| Making decisions | `trekker search "<topic>"` |
 
 ---
 
-## When to Use Trekker vs TodoWrite
+## Trekker vs TodoWrite Priority
 
-| Aspect | Trekker | TodoWrite |
-|--------|---------|-----------|
-| Scope | Multi-session | Single-session |
-| Persistence | SQLite database | Conversation-scoped |
-| Best for | Complex projects, dependencies | Linear checklists |
+| Aspect | Trekker (PRIMARY) | TodoWrite (SECONDARY) |
+|--------|-------------------|----------------------|
+| Persistence | SQLite - survives resets | Gone after conversation |
+| Searchable | Yes - semantic + keyword | No |
+| Dependencies | Yes - task relationships | Limited |
+| History | Yes - full audit trail | No |
+| Priority | **ALWAYS USE FIRST** | Mirror only |
 
-**Decision rule**: "Will I need this context tomorrow?" If yes, use Trekker.
+**Rule**: Trekker is the source of truth. TodoWrite is a convenience mirror for the current session.
 
 ---
 

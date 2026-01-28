@@ -1,41 +1,67 @@
 name: find-duplicates
-description: Detect duplicate tasks before creating new ones. MUST use before creating any task.
+description: MANDATORY before creating any task. Detects duplicates to prevent redundant work.
 
-## Critical Rule: Bidirectional Sync
+## CRITICAL: Run Before Creating ANY Task
 
-**Trekker and Claude's TodoWrite MUST stay in sync:**
-- Trekker change → Update TodoWrite
-- TodoWrite change → Update Trekker
-- NEVER let them get out of sync
+**You MUST run `trekker similar` before creating any task.**
+
+```bash
+trekker similar "<task description you're about to create>"
+```
+
+This prevents duplicate work and consolidates related issues.
 
 ## When to Use (MANDATORY)
 
-- BEFORE creating ANY new task
-- User reports issue that "sounds familiar"
-- Grooming backlog to consolidate
+- **BEFORE creating ANY new task** - non-negotiable
+- **User reports issue** - check if already tracked
+- **Grooming backlog** - find consolidation opportunities
+- **Starting new feature** - find related past work
 
 ## Commands
 
 ```bash
-trekker similar TREK-45
-trekker similar TREK-45 --threshold 0.6
+# Check if description matches existing tasks
 trekker similar "fix authentication bug"
+
+# Check similarity to specific task
+trekker similar TREK-45
+
+# Lower threshold for broader matches
+trekker similar "performance issue" --threshold 0.5
 ```
 
-## Workflow
+## MANDATORY Workflow
 
-1. ALWAYS run: `trekker similar "<task description>"`
-2. Review results
-3. Score >= 90% → DO NOT create, update existing
-4. Score 70-89% → Review carefully, may be related
-5. Score < 70% → Safe to create new
-6. SYNC both Trekker AND TodoWrite
+```
+1. RUN: trekker similar "<what you're about to create>"
+2. REVIEW results
+3. DECIDE based on score:
+   - 90%+ → DO NOT create, update existing task
+   - 75-89% → Review carefully, likely related
+   - <75% → Safe to create new
+4. CREATE in Trekker FIRST (if no duplicate)
+5. MIRROR to TodoWrite after
+```
 
 ## Score Guide
 
 | Score | Action |
 |-------|--------|
-| 95%+ | DO NOT create. Update existing. |
-| 85-94% | Review carefully |
-| 70-84% | Probably different |
-| <70% | Safe to create |
+| 95%+ | **STOP** - Update existing task instead |
+| 85-94% | Review - likely the same issue |
+| 75-84% | Related - consider linking |
+| <75% | Different - safe to create |
+
+## Anti-Patterns (DO NOT)
+
+- Creating task without running `trekker similar` first
+- Ignoring high similarity scores
+- Creating in TodoWrite without checking Trekker first
+
+## Trekker is Primary
+
+Always:
+1. Check Trekker for duplicates FIRST
+2. Create in Trekker FIRST
+3. Then mirror to TodoWrite

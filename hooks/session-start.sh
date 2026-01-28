@@ -100,3 +100,6 @@ echo ""
 # Search reminder and footer
 print_search_reminder
 print_workflow_footer
+
+echo ""
+echo "Run \`trekker quickstart\` anytime for complete command reference and examples."

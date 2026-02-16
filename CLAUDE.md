@@ -24,11 +24,17 @@ This plugin enforces a **search-first workflow**. The core principle:
 
 > You don't remember previous sessions. `trekker search` restores that context.
 
+**IMPORTANT: FTS5 is NOT semantic search.** Use single keywords, not phrases:
+- Multi-word queries use AND logic (all words must match = fewer results)
+- Single keywords have better recall - pick the most distinctive word
+- Search multiple times with different keywords for broader coverage
+
 **Before ANY action** (creating tasks, starting work, investigating issues):
 ```bash
-trekker search "<query>"           # FTS5 full-text search
-trekker search "<query>" --type task  # Filter by type
-trekker search "<query>" --status todo,in_progress  # Filter by status
+trekker search "<keyword>"                          # Single keyword, best recall
+trekker search "<related keyword>"                  # Try different keywords
+trekker search "<keyword>" --type task              # Filter by type
+trekker search "<keyword>" --status todo,in_progress  # Filter by status
 ```
 
 This prevents duplicate work, reveals past decisions, and enables continuity across sessions.

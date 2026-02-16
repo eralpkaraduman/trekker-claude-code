@@ -49,10 +49,13 @@ Wait for explicit approval before proceeding.
 
 ### 3. Search Before Creating
 
-Before creating a new issue, search for duplicates:
+Before creating a new issue, search for duplicates using **single keywords** (FTS5, not semantic):
 
 ```bash
-trekker search "<relevant keywords>" --type task,subtask --limit 5
+# Use the most distinctive keyword from the issue
+trekker search "<keyword>" --type task,subtask --limit 5
+# Try a second keyword if first search has no results
+trekker search "<related keyword>" --type task,subtask --limit 5
 ```
 
 If similar issues exist, present them to the user:

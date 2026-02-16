@@ -7,10 +7,26 @@ description: PRIMARY tool for gathering context. Search tasks before any action.
 
 Before starting ANY work:
 ```bash
-trekker search "<what you're about to do>"
+trekker search "<single keyword>"
 ```
 
 This finds related past work using FTS5 full-text search.
+
+## IMPORTANT: FTS5 is NOT Semantic Search
+
+Trekker uses FTS5 full-text search, NOT semantic/AI search. This means:
+
+- **Use single, specific keywords** - not phrases or sentences
+- **Multi-word queries use AND logic** - `"fix authentication bug"` requires ALL three words present, returning FEWER results
+- **Search multiple times** with different keywords for broader coverage
+- **Pick the most distinctive word** from what you're looking for
+
+| BAD (too many words) | GOOD (single keyword) |
+|----------------------|-----------------------|
+| `trekker search "fix login authentication bug"` | `trekker search "authentication"` |
+| `trekker search "user cannot access account"` | `trekker search "account"` |
+| `trekker search "performance optimization slow"` | `trekker search "performance"` |
+| `trekker search "deployment pipeline issues"` | `trekker search "deployment"` |
 
 ## When to Use (ALWAYS)
 
@@ -20,25 +36,21 @@ This finds related past work using FTS5 full-text search.
 - **When user describes problem** - understand history
 - **When resuming work** - recover context
 
-## Examples
-
-| User Says | Command |
-|-----------|---------|
-| "login problems" | `trekker search "login authentication"` |
-| "app is slow" | `trekker search "performance"` |
-| "fix the auth" | `trekker search "authentication"` |
-
 ## Commands
 
 ```bash
-# Basic search
-trekker search "user cannot access account"
+# Search with a single keyword
+trekker search "authentication"
+
+# Try multiple keywords separately for broader coverage
+trekker search "login"
+trekker search "password"
 
 # Filter by type
-trekker search "deployment issues" --type task
+trekker search "deployment" --type task
 
 # Filter by status
-trekker search "memory leak" --status todo,in_progress
+trekker search "memory" --status todo,in_progress
 
 # Rebuild index if needed
 trekker search "caching" --rebuild-index
@@ -47,10 +59,11 @@ trekker search "caching" --rebuild-index
 ## Workflow: Before ANY Task Operation
 
 ```
-1. SEARCH: trekker search "<description>"
-2. REVIEW: Check if similar work exists
-3. DECIDE: Update existing OR create new
-4. SYNC: Mirror to TodoWrite after Trekker
+1. SEARCH: trekker search "<single keyword>"
+2. BROADEN: Try 2-3 related keywords if first search has no results
+3. REVIEW: Check if similar work exists
+4. DECIDE: Update existing OR create new
+5. SYNC: Mirror to TodoWrite after Trekker
 ```
 
 ## Trekker is Primary

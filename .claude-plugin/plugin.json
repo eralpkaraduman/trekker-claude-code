@@ -1,7 +1,7 @@
 {
   "name": "trekker",
   "description": "AI-optimized issue tracker for coding workflows. Search-first workflow with persistent task memory across sessions.",
-  "version": "1.7.2",
+  "version": "1.7.3",
   "author": {
     "name": "Omercan Balandi",
     "url": "https://github.com/obsfx"
@@ -42,6 +42,18 @@
           {
             "type": "command",
             "command": "bash ${CLAUDE_PLUGIN_ROOT}/hooks/pre-compact.sh"
+          }
+        ]
+      }
+    ],
+    "TaskCompleted": [
+      {
+        "matcher": "",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash ${CLAUDE_PLUGIN_ROOT}/hooks/task-completed.sh",
+            "timeout": 10
           }
         ]
       }

@@ -16,23 +16,30 @@ trekker search "<task description you're about to create>"
 - **Grooming backlog** - find consolidation opportunities
 - **Starting new feature** - find related past work
 
+## IMPORTANT: FTS5 Search Tips
+
+Search uses FTS5 (not semantic). Use **single keywords** for best recall:
+- Multi-word queries require ALL words present (AND logic = fewer results)
+- Search multiple times with different keywords
+
 ## Commands
 
 ```bash
-# Search for similar tasks before creating
-trekker search "fix authentication bug"
+# Search with single keywords - try the most distinctive word
+trekker search "authentication"
+trekker search "login"
 
 # Search specific type
-trekker search "login timeout" --type task
+trekker search "timeout" --type task
 
 # Search by status
-trekker search "performance issue" --status todo,in_progress
+trekker search "performance" --status todo,in_progress
 ```
 
 ## MANDATORY Workflow
 
 ```
-1. SEARCH: trekker search "<what you're about to create>"
+1. SEARCH: trekker search "<single keyword>" (try 2-3 keywords separately)
 2. REVIEW results
 3. DECIDE:
    - Found exact match → DO NOT create, update existing task

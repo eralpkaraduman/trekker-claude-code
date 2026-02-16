@@ -36,15 +36,24 @@ TodoWrite = Secondary mirror (conversation-scoped only)
 
 **You MUST search before ANY action.** This is non-negotiable.
 
+**IMPORTANT: FTS5 is NOT semantic search.** Use single keywords, not phrases:
+- Multi-word queries use AND logic (all words must match = fewer results)
+- Single keywords have better recall
+- Search multiple times with different keywords for coverage
+
 ```bash
-# Full-text search (FTS5)
-trekker search "<what you're looking for>"
+# Use single, specific keywords (NOT phrases or sentences)
+trekker search "authentication"
+
+# Try related keywords separately for broader coverage
+trekker search "login"
+trekker search "password"
 
 # Filter by type
-trekker search "<query>" --type task
+trekker search "deployment" --type task
 
 # Filter by status
-trekker search "<query>" --status todo,in_progress
+trekker search "memory" --status todo,in_progress
 ```
 
 **Why search is mandatory:**
@@ -56,9 +65,9 @@ trekker search "<query>" --status todo,in_progress
 **When to search:**
 | Before... | Search for... |
 |-----------|---------------|
-| Creating a task | `trekker search "<description>"` |
+| Creating a task | `trekker search "<keyword>"` (most distinctive word) |
 | Starting work | `trekker search "<area>"` |
-| Investigating bugs | `trekker search "<symptoms>"` |
+| Investigating bugs | `trekker search "<symptom>"` |
 | Implementing features | `trekker search "<feature>"` |
 | Making decisions | `trekker search "<topic>"` |
 
@@ -174,10 +183,9 @@ trekker comment list <task-id>
 **STOP. Before doing anything, search for related work:**
 
 ```bash
-# Search for related past work - try multiple queries
+# Use single keywords - FTS5 is not semantic, multi-word = AND logic
 trekker search "authentication"
 trekker search "login"
-trekker search "user auth"
 
 # Check completed tasks for solutions
 trekker --toon task list --status completed

@@ -85,10 +85,12 @@ print_search_reminder() {
     echo ""
     echo "**Search before creating or starting work:**"
     echo "\`\`\`bash"
-    echo "trekker search \"<what you're looking for>\""
+    echo "trekker search \"<single keyword>\""
     echo "\`\`\`"
     echo ""
     echo "**Why:** You don't remember previous sessions. Search restores context, reveals past decisions, and prevents duplicate work."
+    echo ""
+    echo "**Tip:** FTS5 is not semantic. Use single keywords for best recall. Multi-word queries use AND logic (fewer results). Try 2-3 separate keywords."
 }
 
 # Print workflow footer
